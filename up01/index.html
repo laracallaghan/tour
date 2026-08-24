@@ -2,22 +2,20 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>VOD Loader</title>
+    <title>My krpano page</title>
 </head>
 <body>
 
-<h1>VOD Loader</h1>
-
-<div id="content">Loading...</div>
+<div id="krpano"></div>
 
 <script>
 const params = new URLSearchParams(location.search);
 const vod = params.get("vod");
 
-if (!vod || !/^[A-Za-z0-9_-]+$/.test(vod)) {
-    document.getElementById("content").textContent = "Invalid VOD ID";
-} else {
-    fetch("../test/" + encodeURIComponent(vod) + ".html")
+if (vod && /^[A-Za-z0-9_-]+$/.test(vod)) {
+    const url = "../test/" + encodeURIComponent(vod) + ".html";
+
+    fetch(url)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Content not found");
@@ -25,12 +23,10 @@ if (!vod || !/^[A-Za-z0-9_-]+$/.test(vod)) {
             return response.text();
         })
         .then(html => {
-            document.open();
-            document.write(html);
-            document.close();
+            document.getElementById("krpano").innerHTML = html;
         })
         .catch(error => {
-            document.getElementById("content").textContent = error.message;
+            document.getElementById("krpano").textContent = error.message;
         });
 }
 </script>
