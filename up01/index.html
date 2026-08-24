@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>VOD Loader</title>
+</head>
+<body>
+
+<h1>VOD Loader</h1>
+
+<div id="content">Loading...</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const vod = params.get("vod");
+
+if (!vod || !/^[A-Za-z0-9_-]+$/.test(vod)) {
+    document.getElementById("content").textContent = "Invalid VOD ID";
+} else {
+    fetch("../test/" + encodeURIComponent(vod) + ".html")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Content not found");
+            }
+            return response.text();
+        })
+        .then(html => {
+            document.open();
+            document.write(html);
+            document.close();
+        })
+        .catch(error => {
+            document.getElementById("content").textContent = error.message;
+        });
+}
+</script>
+
+</body>
+</html>
